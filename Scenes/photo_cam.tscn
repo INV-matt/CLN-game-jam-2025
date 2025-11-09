@@ -1,0 +1,56 @@
+[gd_scene load_steps=8 format=3 uid="uid://bnwn05jinymma"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_t3eg0"]
+albedo_color = Color(0.73939157, 0.6386295, 0.9356224, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_0od2c"]
+material = SubResource("StandardMaterial3D_t3eg0")
+size = Vector3(0.65, 0.4, 0.1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_0p6fs"]
+top_radius = 0.2
+bottom_radius = 0.2
+height = 0.1
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_t3eg0"]
+viewport_path = NodePath("SubViewport")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_0od2c"]
+viewport_path = NodePath("SubViewport")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0od2c"]
+resource_local_to_scene = true
+specular_mode = 2
+albedo_texture = SubResource("ViewportTexture_t3eg0")
+emission_enabled = true
+emission_texture = SubResource("ViewportTexture_0od2c")
+
+[sub_resource type="QuadMesh" id="QuadMesh_t3eg0"]
+resource_local_to_scene = true
+material = SubResource("StandardMaterial3D_0od2c")
+size = Vector2(0.576, 0.324)
+
+[node name="PhotoCam" type="Node3D"]
+
+[node name="Camera Mesh" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_0od2c")
+
+[node name="Camera Mesh2" type="MeshInstance3D" parent="Camera Mesh"]
+transform = Transform3D(1, 0, 0, 0, -4.3711385e-08, 0.99999994, 0, -0.99999994, -4.3711385e-08, 0, -2.4486297e-09, -0.056018114)
+mesh = SubResource("CylinderMesh_0p6fs")
+skeleton = NodePath("../..")
+
+[node name="ScreenMesh" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.059906602)
+mesh = SubResource("QuadMesh_t3eg0")
+
+[node name="RemoteTransform3D" type="RemoteTransform3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.1370969)
+remote_path = NodePath("../SubViewport/Camera3D")
+update_scale = false
+
+[node name="SubViewport" type="SubViewport" parent="."]
+
+[node name="Camera3D" type="Camera3D" parent="SubViewport"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.1370969)
+top_level = true

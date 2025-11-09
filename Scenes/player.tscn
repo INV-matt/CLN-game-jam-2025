@@ -1,0 +1,95 @@
+[gd_scene load_steps=10 format=3 uid="uid://un0un472braa"]
+
+[ext_resource type="Script" uid="uid://brup1ovukpacj" path="res://Scripts/player.gd" id="1_v0iea"]
+[ext_resource type="Script" uid="uid://deyhjhieg1dh1" path="res://Scripts/first_person_camera.gd" id="2_cvnsp"]
+[ext_resource type="PackedScene" uid="uid://bnwn05jinymma" path="res://Scenes/photo_cam.tscn" id="3_6t5aa"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_f60y1"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_v0iea"]
+albedo_color = Color(0.6838219, 0.66176206, 0.9094962, 1)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_v0iea"]
+material = SubResource("StandardMaterial3D_v0iea")
+
+[sub_resource type="Animation" id="Animation_6t5aa"]
+resource_name = "take_out_camera"
+length = 2.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Head/FP_Camera/PhotoCam:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.033333335, 0.23333335, 1.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [false, true, true]
+}
+tracks/1/type = "position_3d"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Head/FP_Camera/PhotoCam")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = PackedFloat32Array(0, 1, 0, -1.225466, -0.21857584, 0.3, 1, 0, -1.225466, -0.52553976, 1, 1, 0, 0, -0.75, 1.2, 1, 0, 0, -0.427495)
+
+[sub_resource type="Animation" id="Animation_vgqql"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Head/FP_Camera/PhotoCam:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "position_3d"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Head/FP_Camera/PhotoCam")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = PackedFloat32Array(0, 1, 0, -1.225466, -0.21857584)
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_vgqql"]
+_data = {
+&"RESET": SubResource("Animation_vgqql"),
+&"take_out_camera": SubResource("Animation_6t5aa")
+}
+
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("ANIM", "CAM", "HEAD", "PHOTO")]
+collision_layer = 2
+collision_mask = 3
+script = ExtResource("1_v0iea")
+Speed = 10
+ANIM = NodePath("AnimationPlayer")
+CAM = NodePath("Head/FP_Camera")
+HEAD = NodePath("Head")
+PHOTO = NodePath("Head/FP_Camera/PhotoCam")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_f60y1")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("CapsuleMesh_v0iea")
+
+[node name="Head" type="Node3D" parent="." node_paths=PackedStringArray("Camera")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+script = ExtResource("2_cvnsp")
+Camera = NodePath("FP_Camera")
+
+[node name="FP_Camera" type="Camera3D" parent="Head"]
+
+[node name="PhotoCam" parent="Head/FP_Camera" instance=ExtResource("3_6t5aa")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.225466, -0.21857584)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_vgqql")
+}

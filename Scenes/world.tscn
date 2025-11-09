@@ -1,0 +1,53 @@
+[gd_scene load_steps=8 format=3 uid="uid://c0g2mj40ow8pg"]
+
+[ext_resource type="Script" uid="uid://bkvhumnoxyvmo" path="res://Scripts/world.gd" id="1_a02cp"]
+[ext_resource type="FastNoiseLite" uid="uid://cgijhw7euqwld" path="res://Noise/TerrainNoise.tres" id="2_8j60k"]
+[ext_resource type="Script" uid="uid://cohovlv76n270" path="res://Scripts/lod_ranges.gd" id="2_go701"]
+[ext_resource type="PackedScene" uid="uid://un0un472braa" path="res://Scenes/player.tscn" id="3_5a7ea"]
+
+[sub_resource type="Resource" id="Resource_5a7ea"]
+script = ExtResource("2_go701")
+End = 4
+LOD = 1.0
+metadata/_custom_type_script = "uid://cohovlv76n270"
+
+[sub_resource type="Resource" id="Resource_8j60k"]
+script = ExtResource("2_go701")
+Start = 5
+End = 8
+LOD = 0.5
+metadata/_custom_type_script = "uid://cohovlv76n270"
+
+[sub_resource type="Environment" id="Environment_5a7ea"]
+background_mode = 1
+background_color = Color(0.62979996, 0.8676201, 0.94, 1)
+fog_light_color = Color(0.3363, 0.45469332, 0.59, 1)
+fog_light_energy = 1.2
+fog_density = 0.003
+fog_sky_affect = 0.0
+
+[node name="World" type="Node3D" node_paths=PackedStringArray("playerTransform")]
+script = ExtResource("1_a02cp")
+TerrainNoise = ExtResource("2_8j60k")
+playerTransform = NodePath("Origin")
+MaxHeight = 32
+RenderDistance = 12
+Ranges = Array[ExtResource("2_go701")]([SubResource("Resource_5a7ea"), SubResource("Resource_8j60k")])
+PL_Scene = ExtResource("3_5a7ea")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_5a7ea")
+
+[node name="ChunkContainer" type="Node3D" parent="."]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.8660254, -0.25, 0.4330127, 0, 0.8660254, 0.5, -0.5, -0.4330127, 0.75, 0, 0, 0)
+light_energy = 1.5
+shadow_enabled = true
+shadow_bias = 0.075
+shadow_normal_bias = 3.0
+directional_shadow_mode = 1
+directional_shadow_split_1 = 1.0
+directional_shadow_max_distance = 1000.0
+
+[node name="Origin" type="Node3D" parent="."]
