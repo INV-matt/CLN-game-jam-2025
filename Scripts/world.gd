@@ -1,11 +1,14 @@
 extends Node3D
 
 @export var TerrainNoise: FastNoiseLite
+@export var BuildingsNoise: FastNoiseLite
 @export var playerTransform: Node3D
 @export var ChunkSize: int = 32
 @export var MaxHeight: int = 64
 @export var RenderDistance: int = 16
 @export var Ranges: Array[LOD_Range]
+
+@export var Buildings: Array[PackedScene]
 
 @export var PL_Scene: PackedScene
 var is_player_created = false
@@ -20,9 +23,12 @@ var thread: Thread
 
 
 func _ready() -> void:
-  TerrainNoise.seed = randi()
+  var my_seed = randi()
+  TerrainNoise.seed = my_seed
+  BuildingsNoise.seed = my_seed
   thread = Thread.new()
   SIGNALBUS.finished_world_creation.connect(_on_finished_world_creation)
+  GLOBALS.BuildingArray = Buildings
 
 
 func _process(_delta: float) -> void:
@@ -42,12 +48,6 @@ func update_chunks():
   var cx = c_pos.x
   var cz = c_pos.y
 
-  # for x in range(cx - RenderDistance, cx + RenderDistance):
-  #   for z in range(cz - RenderDistance, cz + RenderDistance):
-  #     add_chunk(x, z, 1)
-  #     var c = get_chunk(x, z)
-  #     if c != null:
-  #       c.should_remove = false
   for lod_range in Ranges:
     for x in range(cx - lod_range.End, cx - lod_range.Start + 1):
       for z in range(cz - lod_range.End, cz + lod_range.End):
@@ -114,8 +114,6 @@ func add_chunk(x: int, z: int, lod: float):
       chunks[key].should_remove = true
     return
   if unready_chunks.has(key):
-    # if unready_chunks[key] != lod:
-    #   unready_chunks[key] = true
     return
 
     
@@ -125,7 +123,12 @@ func add_chunk(x: int, z: int, lod: float):
 
 
 func _load_chunk(thr: Thread, x: int, z: int, lod: float):
-  var c = Chunk.new(TerrainNoise, ChunkSize, MaxHeight, lod, Vector2i(x, z))
+  var building_value: float = BuildingsNoise.get_noise_2d(x, z)
+  var building = Chunk.BuildingType.Empty
+
+  if building_value > .75: building = Chunk.BuildingType.Ruin
+
+  var c = Chunk.new(TerrainNoise, ChunkSize, MaxHeight, lod, Vector2i(x, z), building)
   c.position = Vector3(x * ChunkSize, 0, z * ChunkSize)
   call_deferred("_on_load_finished", c, thr)
 

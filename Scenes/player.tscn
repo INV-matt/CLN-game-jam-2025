@@ -12,6 +12,28 @@ albedo_color = Color(0.6838219, 0.66176206, 0.9094962, 1)
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_v0iea"]
 material = SubResource("StandardMaterial3D_v0iea")
 
+[sub_resource type="Animation" id="Animation_vgqql"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Head/FP_Camera/PhotoCam:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "position_3d"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Head/FP_Camera/PhotoCam")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = PackedFloat32Array(0, 1, 0, -1.225466, -0.21857584)
+
 [sub_resource type="Animation" id="Animation_6t5aa"]
 resource_name = "take_out_camera"
 length = 2.0
@@ -35,28 +57,6 @@ tracks/1/interp = 2
 tracks/1/loop_wrap = true
 tracks/1/keys = PackedFloat32Array(0, 1, 0, -1.225466, -0.21857584, 0.3, 1, 0, -1.225466, -0.52553976, 1, 1, 0, 0, -0.75, 1.2, 1, 0, 0, -0.427495)
 
-[sub_resource type="Animation" id="Animation_vgqql"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Head/FP_Camera/PhotoCam:visible")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
-tracks/1/type = "position_3d"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Head/FP_Camera/PhotoCam")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = PackedFloat32Array(0, 1, 0, -1.225466, -0.21857584)
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_vgqql"]
 _data = {
 &"RESET": SubResource("Animation_vgqql"),
@@ -67,7 +67,7 @@ _data = {
 collision_layer = 2
 collision_mask = 3
 script = ExtResource("1_v0iea")
-Speed = 10
+Speed = 20
 ANIM = NodePath("AnimationPlayer")
 CAM = NodePath("Head/FP_Camera")
 HEAD = NodePath("Head")

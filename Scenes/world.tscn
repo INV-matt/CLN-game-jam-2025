@@ -1,9 +1,17 @@
-[gd_scene load_steps=8 format=3 uid="uid://c0g2mj40ow8pg"]
+[gd_scene load_steps=11 format=3 uid="uid://c0g2mj40ow8pg"]
 
 [ext_resource type="Script" uid="uid://bkvhumnoxyvmo" path="res://Scripts/world.gd" id="1_a02cp"]
 [ext_resource type="FastNoiseLite" uid="uid://cgijhw7euqwld" path="res://Noise/TerrainNoise.tres" id="2_8j60k"]
 [ext_resource type="Script" uid="uid://cohovlv76n270" path="res://Scripts/lod_ranges.gd" id="2_go701"]
 [ext_resource type="PackedScene" uid="uid://un0un472braa" path="res://Scenes/player.tscn" id="3_5a7ea"]
+[ext_resource type="PackedScene" uid="uid://d2jjh5tfetgs2" path="res://Meshes/Pillar.02.glb" id="4_fo5ed"]
+[ext_resource type="PackedScene" uid="uid://ldtnf0as8bdb" path="res://Meshes/House.01.glb" id="5_5ukr8"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_8j60k"]
+noise_type = 3
+frequency = 0.2
+fractal_type = 0
+cellular_return_type = 0
 
 [sub_resource type="Resource" id="Resource_5a7ea"]
 script = ExtResource("2_go701")
@@ -29,10 +37,12 @@ fog_sky_affect = 0.0
 [node name="World" type="Node3D" node_paths=PackedStringArray("playerTransform")]
 script = ExtResource("1_a02cp")
 TerrainNoise = ExtResource("2_8j60k")
+BuildingsNoise = SubResource("FastNoiseLite_8j60k")
 playerTransform = NodePath("Origin")
 MaxHeight = 32
 RenderDistance = 12
 Ranges = Array[ExtResource("2_go701")]([SubResource("Resource_5a7ea"), SubResource("Resource_8j60k")])
+Buildings = Array[PackedScene]([ExtResource("5_5ukr8"), ExtResource("4_fo5ed")])
 PL_Scene = ExtResource("3_5a7ea")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
